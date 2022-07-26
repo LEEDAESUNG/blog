@@ -28,6 +28,8 @@ function App() {
         //let copy = 글제목; //array 또는 object 는 포인터개념, copy == 글제목
         let copy = [...글제목];
         copy[0] = '여자코드 추천';
+        console.log(글제목);
+        console.log(copy);
         제목변경(copy);
       }} > 글수정</button>
 
