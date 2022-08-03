@@ -3,12 +3,32 @@ import { useState } from 'react';
 
 function App(){
 
+    
+    
+
     let [DetailModal, setDetailModal] = useState(false);
-    let [Title, setTitle] = useState(['하계유니폼', '동절기정장', '만능체육복']);
+    // let [Title, setTitle] = useState(['하계유니폼', '동절기정장', '만능체육복']);
+    let [Title, setTitle] = useState(['하계', '동절기정장', '만능체육복']);
     let [SelectTitleIndex, setSelectTitleIndex] = useState(0);
     let [Like, setLike] = useState(0);
     let [입력값, 입력값변경] = useState('');
 
+    // const numbers = [1, 2, 3, 4, 5];
+    // const result = numbers.filter(number => number > 3);
+    // console.log(numbers);
+    // // [1, 2, 3, 4, 5];
+    // console.log(result);
+    // // [4, 5]
+    // console.log(Title);
+    // const resul2 = Title.filter(number => number !== '하계');
+    // console.log(resul2);
+
+
+    const onDelete = delName => {
+        Title = Title.filter(str => str !== delName);
+        setTitle(Title);
+    };
+    
     return (
         <div className="App">
             <div className="black-nav">
@@ -36,7 +56,7 @@ function App(){
                         <div className="list" key={i}>
                             <h4 onClick={() => { setDetailModal(true); setSelectTitleIndex(i); }}>{Title[i]} 
                                 <span onClick={ (e)=>{ setLike(Like+1) }}>👍</span> {Like} 
-                                <button onClick={(e) => { Title.pop(Title[i]); console.log(Title); }}> 삭제 </button>
+                                <button onClick={(e) => { onDelete(Title[i]) }}> 삭제 </button>
                                 {/* e.stopPropagation():이벤트버블링 중지 */}
                             </h4>
                             <p>8월2일</p>
@@ -46,8 +66,8 @@ function App(){
             }
             
             <input type="text" onChange={(e) => { 입력값변경(e.target.value); console.log({입력값}); }}/>
-            <button onClick={() => { Title.push(입력값); console.log(Title) }}> 등록 </button>
-
+            {/* <button onClick={() => { Title.push(입력값); setTitle(Title); }}> 등록 </button> */}
+            <button onClick={() => { setTitle([...Title, 입력값]) }}> 등록 </button>
             {
                 DetailModal ? <DetailProductDesc Title={Title} SelectTitleIndex={SelectTitleIndex} Color={'grey'} /> : null
             }
