@@ -7,10 +7,10 @@ function App(){
     
 
     let [DetailModal, setDetailModal] = useState(false);
-    // let [Title, setTitle] = useState(['하계유니폼', '동절기정장', '만능체육복']);
-    let [Title, setTitle] = useState(['하계', '동절기정장', '만능체육복']);
+    let [Title, setTitle] = useState(['하계유니폼', '동절기정장', '만능체육복']);
     let [SelectTitleIndex, setSelectTitleIndex] = useState(0);
-    let [Like, setLike] = useState(0);
+    //let [Like, setLike] = useState(0);
+    let [Like, setLike] = useState([0,0,0]);
     let [입력값, 입력값변경] = useState('');
 
     // const numbers = [1, 2, 3, 4, 5];
@@ -24,9 +24,40 @@ function App(){
     // console.log(resul2);
 
 
-    const onDelete = delName => {
-        Title = Title.filter(str => str !== delName);
-        setTitle(Title);
+    // const onDelete = delName => {
+    //     //Title = Title.filter(str => str !== delName);
+    //     //setTitle(Title);
+    //     setTitle(Title.filter(str => str !== delName));
+    // };
+    const onLike = index => {
+        let copyLike = [...Like];
+        copyLike[index] = copyLike[index]+1;
+        setLike(copyLike);
+    };
+    const onDelete = index => {
+        let copy = [...Title];
+        copy.splice(index, 1); //index 항목부터 1개 제거
+        setTitle(copy);
+
+        let copyLike = [...Like];
+        copyLike.splice(index,1);
+        setLike(copyLike);
+    };
+    const onAdd = addName => {
+        if (String(addName).length == 0) {
+            return;
+        }
+        //setTitle([...Title, addName])
+        let copy = [...Title];
+        copy.unshift(addName); //copy의 가장 앞쪽에 삽입
+
+        //copy.push(addName);  //copy의 가장 마지막에 추가
+        //copy.shift();        // copy의 첫 번째 요소를 제거
+        setTitle(copy);        
+
+        let copyLike = [...Like];
+        copyLike.unshift(0);
+        setLike(copyLike);
     };
     
     return (
@@ -55,8 +86,10 @@ function App(){
                     return (
                         <div className="list" key={i}>
                             <h4 onClick={() => { setDetailModal(true); setSelectTitleIndex(i); }}>{Title[i]} 
-                                <span onClick={ (e)=>{ setLike(Like+1) }}>👍</span> {Like} 
-                                <button onClick={(e) => { onDelete(Title[i]) }}> 삭제 </button>
+                                {/* <span onClick={ (e)=>{ setLike(Like+1) }}>👍</span> {Like[i]}  */}
+                                <span onClick={(e) => { onLike(i) }}>👍</span> {Like[i]} 
+                                {/* <button onClick={(e) => { onDelete(Title[i]) }}> 삭제 </button> */}
+                                <button onClick={(e) => { onDelete(i) }}> 삭제 </button>
                                 {/* e.stopPropagation():이벤트버블링 중지 */}
                             </h4>
                             <p>8월2일</p>
@@ -67,7 +100,8 @@ function App(){
             
             <input type="text" onChange={(e) => { 입력값변경(e.target.value); console.log({입력값}); }}/>
             {/* <button onClick={() => { Title.push(입력값); setTitle(Title); }}> 등록 </button> */}
-            <button onClick={() => { setTitle([...Title, 입력값]) }}> 등록 </button>
+            {/* <button onClick={() => { setTitle([...Title, 입력값]) }}> 등록 </button> */}
+            <button onClick={() => { onAdd(입력값) }}> 글발행 </button>
             {
                 DetailModal ? <DetailProductDesc Title={Title} SelectTitleIndex={SelectTitleIndex} Color={'grey'} /> : null
             }
